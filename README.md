@@ -8,15 +8,19 @@
 > against data corruption (Source: Wikipedia)
 
 ## Introduction
+
 This is a simple application to compute an n-bit binary CRC.
 
 ## Usage and Computation Example
 
 ### Get the CRC remainder
 
-I think you should use an
-`<addr>` element here instead.
+`string remainder = CalculateRemainder(message, polynom);`
 
-Calculation Example 
+### Check the CRC remainder
+
+`string result = CheckCRCMessage(message, polynom, remainder);`
+
+### Computation Example
 
 ![Example Of CRC Remainder Calculation](https://github.com/DanielShefer/CRC-Remainder-Calculator/blob/master/CRC_Calculation.PNG)
