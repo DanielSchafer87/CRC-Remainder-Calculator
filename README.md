@@ -9,7 +9,7 @@
 
 ## Introduction
 
-This is a simple application to compute an n-bit binary CRC.
+This is a simple application to compute and check an n-bit binary CRC remainder.
 
 ## Usage and Computation Example
 
