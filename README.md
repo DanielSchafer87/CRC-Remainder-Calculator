@@ -38,3 +38,9 @@ This is first padded with zeros corresponding to the bit length n of the CRC. He
 The algorithm acts on the bits directly above the divisor in each step. The result for that iteration is the bitwise XOR of the polynomial divisor with the bits above it. The bits not above the divisor are simply copied directly below for that step. The divisor is then shifted one bit to the right, and the process is repeated until the divisor reaches the right-hand end of the input row. Here is the entire calculation:
 
 ![Example Of CRC Remainder Calculation](https://github.com/DanielShefer/CRC-Remainder-Calculator/blob/master/CRC_Calculation.PNG)
+
+### Checking Example 
+
+The validity of a received message can easily be verified by performing the above calculation again, this time with the check value added instead of zeroes. The remainder should equal zero if there are no detectable errors.
+
+
