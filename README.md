@@ -43,4 +43,5 @@ The algorithm acts on the bits directly above the divisor in each step. The resu
 
 The validity of a received message can easily be verified by performing the above calculation again, this time with the check value added instead of zeroes. The remainder should equal zero if there are no detectable errors.
 
+![Example Of CRC Check Calculation](https://github.com/DanielShefer/CRC-Remainder-Calculator/blob/master/CRC_Check.PNG)
 
