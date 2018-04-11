@@ -32,6 +32,7 @@ Start with the message to be encoded:
 This is first padded with zeros corresponding to the bit length n of the CRC. Here is the first calculation for computing a 3-bit CRC:
 
 > 10011010 000 <--- input right padded by 3 bits
+
 > 1101         <--- divisor (4 bits) = x³ + x² + 1
 
 The algorithm acts on the bits directly above the divisor in each step. The result for that iteration is the bitwise XOR of the polynomial divisor with the bits above it. The bits not above the divisor are simply copied directly below for that step. The divisor is then shifted one bit to the right, and the process is repeated until the divisor reaches the right-hand end of the input row. Here is the entire calculation:
