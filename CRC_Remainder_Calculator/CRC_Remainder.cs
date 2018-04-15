@@ -79,14 +79,12 @@ namespace CRC_Remainder_Calculator
         public static string CRCRemainder(string message, string polynom)
         {
             int position = 0;
+            int polynomDegree = polynom.Length - 1;
             string xorResult = string.Empty;
             string tempXORResult = string.Empty;
 
             //Do the first XOR between the message and the polynom.
-            for (int i = 0; i < polynom.Length; i++) { tempXORResult += (message[i] ^ polynom[i]); }
-
-            xorResult = tempXORResult;
-            tempXORResult = string.Empty;
+            for (int i = 0; i < polynom.Length; i++) { xorResult += (message[i] ^ polynom[i]); }
 
             Console.WriteLine(message);
             Console.WriteLine(polynom);
@@ -95,13 +93,13 @@ namespace CRC_Remainder_Calculator
             //Run until we reach the last bit of the message.
             while ((position + xorResult.Length) != message.Length)
             {
-                if (xorResult.IndexOf("1") != 0)
+                if (xorResult.IndexOf("1") >= 0)
                 {
                     //Get the amount of zeros until the first "1"
                     int limit = xorResult.IndexOf("1");
-                    
+
                     //Remove all zeros until the first "1"
-                    xorResult = xorResult.Substring(xorResult.IndexOf("1"));
+                    xorResult = xorResult.Substring(limit);                    
 
                     //Add the number of zeros we removed to the new current position.
                     position += limit;
@@ -109,41 +107,39 @@ namespace CRC_Remainder_Calculator
                     //Remeber the current size of result without the leading zeros.
                     int tempPosition = xorResult.Length;
 
-                    //Complete the missing numbers from tje message to match the size of the polynom
-                    tempXORResult = xorResult;
                     for (int j=0; j < limit; j++)
                     {
-                        try
-                        {
-                            //Add bits to the result from the original message.
-                            tempXORResult += message[position + tempPosition + j];
-                        }
-                        catch(IndexOutOfRangeException e)
-                        {
-                            //The message is not large enough, return the last result.
-                            return xorResult;
-                        }
+                            //If we reach the end of the message and dont have anymore bit's to take, we are done.
+                            if((position + tempPosition + j) >= message.Length)
+                            {
+                                xorResult = CheckResultSize(xorResult, polynomDegree);
+                                return xorResult;
+                            }
+
+                        //Add bits to the result from the original message,
+                        //in order that the result size will match the polynom size.
+                        xorResult += message[position + tempPosition + j];
                     }
+
+                    printWithSpaces(xorResult, position);
+
+                    printWithSpaces(polynom, position);
+
+                    //Do the XOR between the the last result and the polynom.
+                    for (int i = 0; i < polynom.Length; i++) { tempXORResult += (xorResult[i] ^ polynom[i]); }
 
                     xorResult = tempXORResult;
                     tempXORResult = string.Empty;
+
+                    printWithSpaces(xorResult, position);
                 }
-
-                printWithSpaces(xorResult, position);
-
-                printWithSpaces(polynom, position);
-
-                //Do the XOR.
-                for (int i = 0; i < polynom.Length; i++) { tempXORResult += (xorResult[i] ^ polynom[i]); }
-
-                xorResult = tempXORResult;
-                tempXORResult = string.Empty;
-
-                printWithSpaces(xorResult, position);
+                else
+                {
+                    return xorResult;
+                }
             }
 
-            if(xorResult.IndexOf("1") > 0)
-                xorResult = xorResult.Substring(xorResult.IndexOf("1"));
+            xorResult = CheckResultSize(xorResult, polynomDegree);
 
             return xorResult;           
         }
@@ -160,6 +156,29 @@ namespace CRC_Remainder_Calculator
                 Console.Write(" ");
             }
             Console.WriteLine(valurToPrint);
+        }
+
+        /// <summary>
+        ///The result size needs to be the same as the polynom degree size.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="polynomDegree"></param>
+        private static string CheckResultSize(string result, int polynomDegree)
+        {
+            //Remove all the zeros until the first 1.
+            if (result.IndexOf("1") != -1)
+                result = result.Substring(result.IndexOf("1"));
+           
+            if (result.Length < polynomDegree)
+            {
+                //Adding zero's from the left to make the result the same size as the polynom degree.
+                for (int i = result.Length; i < polynomDegree; i++)
+                {
+                    result = "0"+result;
+                }
+            }
+
+            return result;
         }
     }
 }
